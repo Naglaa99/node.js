@@ -55,7 +55,7 @@ function getproductsBySellerName(name) {
   );
 }
 
-//getAllproducts sea all products for a spasific sellers///////////////
+//getAllproducts sea all products for a spasific sellers//////////////////
 function getAllproductsForSeller(sellerId) {
   return db.execute(
     "SELECT * FROM products p INNER JOIN sellers S on p.seller_id=? ",
@@ -92,7 +92,7 @@ function createproduct(product) {
     [product.name, product.description, product.photo, product.seller_id]
   );
 }
-
+////////////////////////////////////////getsellerContrpller////////
 function getSellerByEmail(email) {
     return db.execute('SELECT * FROM sellers WHERE email = ?', [email]);
   }
