@@ -15,7 +15,7 @@ var {
   getSellerByEmail
 } = require("../controllers/sellersControlers");
 
-// Create a new seller
+// /////////////////////Create a new seller///////////////
 router.post("/", (req, res, next) => {
   createSeller(req.body)
     .then((result) => {
@@ -26,38 +26,7 @@ router.post("/", (req, res, next) => {
     });
 });
 
-//login
-// router.post("/login", (req, res, next) => {
-//   const { email, password } = req.body;
-//   //Check if the seller exists in the database
-//   getSellerByEmail(email)
-//     .then((result) => {
-//       if (result[0].length === 0) {
-//         res.status(404).json({ message: "seller not found" });
-//       } else {
-//         const seller = result[0][0];
-//         // Verify the password
-//         bcryptjs.compare(password, seller.password, (err, isMatch) => {
-//           if (err) {
-//             res.status(500).json({ error: err });
-//           } else if (!isMatch) {
-//             res.status(401).json({ message: "Invalid password" });
-//           } else {
-//             // Create a token and send it back to the client
-//             const payload = { id: seller.id, email: seller.email };
-//             const token = jwt.sign(payload, process.env.SECRET_KEY, {
-//               expiresIn: "1h",
-//             });
-//             res.status(200).json({ token });
-//           }
-//         });
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(500).json({ error: err });
-//     });
-// });
-
+//////////////login///////////////
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
   //Check if the user exists in the database
@@ -86,7 +55,7 @@ router.post("/login", (req, res, next) => {
   });
 });
 
-//get all Products
+///////////////get all Products///////////////
 router.get("/Products",checkToken, (req, res, next) => {
   getAllproducts()
     .then(([rows]) => {
