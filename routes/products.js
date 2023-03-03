@@ -3,7 +3,7 @@ const router=express.Router()
 var {getAllproducts} = require('../controllers/productsControllers')
 
 
-//get all Products 
+///////////////////////get all Products /////////////////////
 router.get("/",(req,res,next)=>{
 
     getAllproducts().then(([rows])=>{
