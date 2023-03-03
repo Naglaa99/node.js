@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
   database: 'ecommerce'
 });
 
-// Get all orders
+// Get all orders/////////////////////
 const getAllOrders = (req, res) => {
   connection.query('SELECT * FROM orders', (error, results, fields) => {
     if (error) {
@@ -20,7 +20,7 @@ const getAllOrders = (req, res) => {
   });
 };
 
-// Create a new order
+// Create a new order/////////////////////
 
 const createOrder = (req, res) => {
     const { userId, products } = req.body;

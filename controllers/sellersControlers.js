@@ -2,7 +2,7 @@ const db = require("../utlis/db");
 const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 
-//register
+//register///////////////
 function createSeller(seller) {
     var salt = bcryptjs.genSaltSync(10);
     var hashedPassword = bcryptjs.hashSync(seller.password, salt);
@@ -14,7 +14,7 @@ function createSeller(seller) {
   }
   
   
-  //login
+  //login/////////////
   const loginSeller = async (email, password) => {
     const [rows] = await db.execute(
       "SELECT id, email, password FROM sellers WHERE email = ?",
@@ -37,7 +37,7 @@ function createSeller(seller) {
     return { token };
   };
   
-//get all products
+//get all products///////////////////
 function getAllproducts() {
   return db.execute("SELECT * FROM products ");
 }
@@ -55,7 +55,7 @@ function getproductsBySellerName(name) {
   );
 }
 
-//getAllproducts sea all products for a spasific sellers
+//getAllproducts sea all products for a spasific sellers///////////////
 function getAllproductsForSeller(sellerId) {
   return db.execute(
     "SELECT * FROM products p INNER JOIN sellers S on p.seller_id=? ",
@@ -63,7 +63,7 @@ function getAllproductsForSeller(sellerId) {
   );
 }
 
-//updateproductById  edit a product by id for sellers
+//updateproductById  edit a product by id for sellers///////////
 function updateproductById(productId, product) {
   return db.execute(
     "UPDATE products SET name=? , description=?, photo=? WHERE id=? &&  seller_id=? ",

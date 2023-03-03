@@ -1,6 +1,6 @@
 const db = require("../utlis/db");
 
-//get all product
+//get all product//////////////////
 function getAllproducts() {
   return db.execute("SELECT * FROM products ");
 }

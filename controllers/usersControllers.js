@@ -17,7 +17,7 @@ function createUser(user) {
 
 
 
-//get all products
+//get all products////////////////
 function getAllproducts() {
   return db.execute("SELECT * FROM products ");
 }
