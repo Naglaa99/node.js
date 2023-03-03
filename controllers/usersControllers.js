@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 
-//register
+////////////////register////////////////
 function createUser(user) {
   var salt = bcryptjs.genSaltSync(10);
   var hashedPassword = bcryptjs.hashSync(user.password, salt);
@@ -17,7 +17,7 @@ function createUser(user) {
 
 
 
-//get all products////////////////
+/////////////get all products////////////////
 function getAllproducts() {
   return db.execute("SELECT * FROM products ");
 }
