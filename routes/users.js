@@ -24,7 +24,7 @@ router.post("/", (req, res, next) => {
     });
 });
 
-//login
+//////////////////////login///////////////////////
 router.post("/login", (req, res, next) => {
   const { username, password } = req.body;
   //Check if the user exists in the database
@@ -53,7 +53,7 @@ router.post("/login", (req, res, next) => {
   });
 });
 
-//get all Products
+/////////////////////get all Products///////////////////
 router.get("/Products",checkToken, (req, res, next) => {
   getAllproducts()
     .then(([rows]) => {
@@ -66,7 +66,6 @@ router.get("/Products",checkToken, (req, res, next) => {
 
 //get Products by productName for user
 router.get("/getProductsbyName/:productname",checkToken,  (req, res, next) => {
-  // var { productname } = req.body;
   var productname = req.params.productname;
 
   getproductsByName(productname)
@@ -80,7 +79,6 @@ router.get("/getProductsbyName/:productname",checkToken,  (req, res, next) => {
 
 //get products By Seller Name for user
 router.get("/getproductsBySellerName/:sellername",checkToken,  (req, res, next) => {
-  // var { sellername } = req.body;
   var sellername = req.params.sellername;
 
   getproductsBySellerName(sellername)
