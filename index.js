@@ -8,7 +8,7 @@ const orderRouters=require('./routes/order')
 
 
 
-
+//middleware//
 app.use(cors())
 app.use(express.json())
 
@@ -28,7 +28,7 @@ app.use((err,req,res,next)=>{
 res.status(500).json({message:err.message})
 
 })
-
+/////////port/////////////
 app.listen(7777, () => {
     console.log("server started listening successfully on port 7777");
 })
