@@ -12,11 +12,12 @@ var {
   createproduct,
   deleteproductById,
   getproductsBySellerName,
-  getSellerByEmail
+  getSellerByEmail,
+  getAllSellers
 } = require("../controllers/sellersControlers");
 
 // /////////////////////Create a new seller///////////////
-router.post("/", (req, res, next) => {
+router.post("/register", (req, res, next) => {
   createSeller(req.body)
     .then((result) => {
       res.status(201).json({ message: "seller created!" });
@@ -32,7 +33,7 @@ router.post("/login", (req, res, next) => {
   //Check if the user exists in the database
   getSellerByEmail(email).then(result => {
       if (result[0].length === 0){
-          res.status(404).json({ message: 'User not found' });
+          res.status(404).json({ message: 'seller not found' });
       } else {
           const user = result[0][0];
           // console.log(user.password);        
@@ -54,17 +55,27 @@ router.post("/login", (req, res, next) => {
       res.status(500).json({ error: 'err' });
   });
 });
-
-///////////////get all Products///////////////
-router.get("/Products",checkToken, (req, res, next) => {
-  getAllproducts()
-    .then(([rows]) => {
-      res.status(200).json(rows);
+//////git all sellers//////
+router.get('/', (req, res, next) => {
+  getAllSellers()
+    .then(result => {
+      res.status(200).json(result[0]);
     })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
     });
 });
+
+//git all products/////////
+router.get("/products",(req,res,next)=>{
+
+  getAllproducts().then(([rows])=>{
+      res.status(200).json(rows)
+     }).catch((err)=>{
+      res.status(500).json({message:err.message})
+     })
+})
 
 //get Products by productName 
 router.get("/getProductsbyName/:productname",checkToken,  (req, res, next) => {
@@ -119,9 +130,15 @@ router.patch("/updateProduct/:id",checkToken, (req, res, next) => {
 });
 
 //delete product
-router.delete("/deleteProduct/:id",checkToken, (req, res, next) => {
+router.delete("/deleteProduct/:id", checkToken, (req, res, next) => {
   var productId = req.params.id;
   var { sellerID } = req.body;
+  
+  if (!productId || !sellerID) {
+    res.status(400).json({ message: "productId or sellerID is undefined" });
+    return;
+  }
+
   deleteproductById(productId, sellerID)
     .then(([rows]) => {
       res.status(200).json(rows);
@@ -130,5 +147,5 @@ router.delete("/deleteProduct/:id",checkToken, (req, res, next) => {
       res.status(500).json({ message: err.message });
     });
 });
-
+//////////////////////
 module.exports = router;

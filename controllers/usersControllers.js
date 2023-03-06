@@ -8,12 +8,16 @@ const jwt = require('jsonwebtoken');
 function createUser(user) {
   var salt = bcryptjs.genSaltSync(10);
   var hashedPassword = bcryptjs.hashSync(user.password, salt);
-  return db.execute("INSERT INTO users (username, password) VALUES (?, ?)", [
+  return db.execute("INSERT INTO users (username, password,email) VALUES (?, ?,?)", [
     user.username,
     hashedPassword,
+    user.email
   ]);
 }
-
+////////////get Allusers///////////////////
+function getAllUsers() {
+  return db.execute('SELECT * FROM users');
+}
 
 
 
@@ -37,18 +41,16 @@ function getproductsBySellerName(name) {
 
 //delete User
 function deleteUser(id) {
-  return db.execute("DELETE FROM users WHERE id = ?", [id]);
+  return db.execute('DELETE FROM users WHERE id = ?', [id]);
 }
 
 //update user
 function updateUser(id, user) {
-  var salt = bcryptjs.genSaltSync(10);
-  var hashedPassword = bcryptjs.hashSync(user.password, salt);
-  return db.execute(
-    "UPDATE users SET username = ?, password = ? WHERE id = ?",
-    [user.username, hashedPassword, id]
-  );
-}
+    var salt = bcryptjs.genSaltSync(10);
+    var hashedPassword = bcryptjs.hashSync(user.password, salt);
+    return db.execute('UPDATE users SET username = ?, password = ?  , email = ?  WHERE id = ?', [user.username, hashedPassword, user.email,id]);
+  }
+
 
 //Get a user by username
 function getUserByUsername(username) {
@@ -62,6 +64,7 @@ module.exports = {
   getAllproducts,
   getproductsByName,
   getproductsBySellerName,
+  getAllUsers,
   updateUser,
   deleteUser,
   createUser,

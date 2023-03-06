@@ -37,6 +37,7 @@ function createSeller(seller) {
     return { token };
   };
   
+  
 //get all products///////////////////
 function getAllproducts() {
   return db.execute("SELECT * FROM products ");
@@ -79,13 +80,13 @@ function updateproductById(productId, product) {
 
 //deleteproductById delete a product by id for sellers
 function deleteproductById(productId, sellerId) {
-  return db.execute("DELETE FROM products WHERE id=?  &&  seller_id=? ", [
+return db.execute("DELETE FROM products WHERE id = ? AND seller_id = ? ", [
     productId,
     sellerId,
   ]);
 }
 
-//create product a product for sellers
+//create  a product for sellers
 function createproduct(product) {
   return db.execute(
     "INSERT into products  ( name, description, photo, seller_id) VALUES (?,?,?,?) ",
@@ -97,7 +98,10 @@ function getSellerByEmail(email) {
     return db.execute('SELECT * FROM sellers WHERE email = ?', [email]);
   }
 
-
+//////////////////git all sellers/////////////
+function getAllSellers() {
+  return db.execute('SELECT * FROM sellers');
+}
 
 
 module.exports = {
@@ -110,5 +114,6 @@ module.exports = {
   getAllproductsForSeller,
   createSeller,
   loginSeller,
-  getSellerByEmail
+  getSellerByEmail,
+  getAllSellers
 };

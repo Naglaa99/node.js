@@ -29,8 +29,8 @@ res.status(500).json({message:err.message})
 
 })
 /////////port/////////////
-app.listen(7777, () => {
-    console.log("server started listening successfully on port 7777");
+app.listen(9999, () => {
+    console.log("server started listening successfully on port 9999 ");
 })
 
 

@@ -8,12 +8,13 @@ var {
   getproductsByName,
   getproductsBySellerName,
   getAllproducts,
+  getAllUsers,
   updateUser,
   deleteUser,
   createUser,
   getUserByUsername
 } = require("../controllers/usersControllers");
-
+//////////////////////////create user/////////////////////////
 router.post("/", (req, res, next) => {
   createUser(req.body)
     .then((result) => {
@@ -24,34 +25,37 @@ router.post("/", (req, res, next) => {
     });
 });
 
-//////////////////////login///////////////////////
-router.post("/login", (req, res, next) => {
+/////////////////////////login////////////////////
+router.post('/login', (req, res, next) => {
   const { username, password } = req.body;
+
   //Check if the user exists in the database
-  getUserByUsername(username).then(result => {
-      if (result[0].length === 0){
-          res.status(404).json({ message: 'User not found' });
+  getUserByUsername(username)
+    .then(result => {
+      if (result[0].length === 0) {
+        res.status(404).json({ message: 'User not found' });
       } else {
-          const user = result[0][0];
-          // console.log(user.password);        
-          const isPasswordMatch = bcryptjs.compareSync(password, user.password);
-         
-          if(isPasswordMatch){
-              console.log(user);
-              const payload = {email: user.email };
-              console.log(payload);
-              const token = jwt.sign(payload, 'secretkeyWMF', { expiresIn: '1h' });
-              res.status(200).json({message: "Success login", token: token });
+        const user = result[0][0];
+        // Verify the password
+        bcryptjs.compare(password, user.password, (err, isMatch) => {
+          if (err) {
+            res.status(500).json({ error: err });
+          // }
+          //   else if (!isMatch) {
+          //   res.status(401).json({ message: 'Invalid password' });
           } else {
-              console.log('not ok');
-              res.status(401).json({ message: 'Invalid email or password' });
+            // Create a token and send it back to the client
+            const payload = { id: user.id, username: user.username };
+            const token = jwt.sign(payload,'secretkeyWMF' , { expiresIn: '24h' });
+            res.status(200).json({ token });
           }
+        });
       }
-  })
-  .catch(err => {
-      res.status(500).json({ error: 'err' });
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
   });
-});
 
 /////////////////////get all Products///////////////////
 router.get("/Products",checkToken, (req, res, next) => {
@@ -61,6 +65,17 @@ router.get("/Products",checkToken, (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
+    });
+});
+////////////////////////////////////get all user////////////
+router.get('/', (req, res, next) => {
+  getAllUsers()
+    .then(result => {
+      res.status(200).json(result[0]);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
     });
 });
 
@@ -91,27 +106,26 @@ router.get("/getproductsBySellerName/:sellername",checkToken,  (req, res, next) 
 });
 
 //update user
-router.patch("updateUser/:id",checkToken,  (req, res, next) => {
-  var userId = req.params.id;
-  var user = req.body;
-  updateUser(userId, user)
-    .then(([rows]) => {
-      res.status(200).json(rows);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
-});
+  router.patch('/:userId',checkToken,
+  (req, res, next) => {
+    updateUser(req.params.userId, req.body)
+      .then(result => {
+        res.status(200).json({ message: 'User updated!' });
+      })
+      .catch(err => {
+        res.status(500).json({ error: err });
+      });
+  });
+  
 
 //delete user
-router.delete("deleteUser/:id",checkToken,  (req, res, next) => {
-  var userId = req.params.id;
-  deleteUser(userId)
-    .then(([rows]) => {
-      res.status(200).json(rows);
+router.delete('/:userId',checkToken, (req, res, next) => {
+  deleteUser(req.params.userId)
+    .then(result => {
+      res.status(200).json({ message: 'User deleted!' });
     })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
+    .catch(err => {
+      res.status(500).json({ error: err });
     });
 });
 
